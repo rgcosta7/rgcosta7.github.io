@@ -177,3 +177,76 @@ If is missing some templates from the list, special the TurnKey you'll need to r
 ```bash
 pveam update
 ```
+
+### Network
+
+**NIC TEAM (LACP)**
+
+To enable port bound on a network just edit interfaces file and add the follow lines:
+
+```bash
+nano /etc/network/interfaces
+```
+
+	auto bond0
+	iface bond0 inet manual
+        	bond-slaves enp3s0f0 enp3s0f1
+	        bond-miimon 100
+	        bond-mode 802.3ad
+	        bond-xmit-hash-policy layer2+3
+
+NOTE: bond-slaves are the name of the both ports you want to bond, you'll need to look for the names that your system are using.
+
+
+**VLANS**
+
+You can make a interfaces vlan aware just by adding the last 2 lines of code to the interfaces file:
+
+```bash
+nano /etc/network/interfaces
+```
+
+	auto vmbr0
+	iface vmbr0 inet static
+        	address 172.31.12.99/24
+	        gateway 172.31.12.254
+	        bridge-ports bond0
+	        bridge-stp off
+	        bridge-fd 0
+	        bridge-vlan-aware yes
+	        bridge-vids 2-4094
+
+
+For a more complex VLAN setup you can create a Linux VLAN and then create a Linux Brigde to that VLAN.
+When create a VM or a container you can pick what bridge you want to give to the VM/Container.
+
+```bash
+nano /etc/network/interfaces
+```
+
+Example:
+
+    auto enp3s0f2.50
+    iface enp3s0f2.50 inet manual
+    #This is VLAN 50 for ADMIN
+
+
+    auto vmbr0
+    iface vmbr0 inet static
+        address 172.31.50.99/24
+        gateway 172.31.50.190
+        bridge-ports enp3s0f2.50
+        bridge-stp off
+        bridge-fd 0
+    #This is VLAN 50 for ADMIN
+
+This way you don't need to tell the Bridge about the VLANS    
+
+<b>PS</b> MAKE SURE YOUR SWITCH ARE PROPERLY SETUP FOR VLANS
+
+
+Restart the network
+
+```bash
+systemctl restart networking.service
+```
