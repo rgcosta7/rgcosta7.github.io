@@ -1,8 +1,8 @@
 ---
 layout: post
 date: 2022-06-10
-categories: [linux,proxmox,lxc]
-tags: [server,linux,lxc,container,debian,plex,proxmox,media]
+categories: [proxmox,server,hardware]
+tags: [server,linux,lxc,container,debian,proxmox,hp,hardware]
 title:  "Install and config Proxmox 7.2 on a HP server"
 ---
 
@@ -242,7 +242,7 @@ Example:
 
 This way you don't need to tell the Bridge about the VLANS    
 
-<b>PS</b> MAKE SURE YOUR SWITCH ARE PROPERLY SETUP FOR VLANS
+<b>PS:</b> MAKE SURE YOUR SWITCH ARE PROPERLY SETUP FOR VLANS
 
 
 Restart the network
